@@ -3,54 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>隨機占卜工具</title>
+    <title>翻開書 - 隨機占卜工具</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
+            font-family: "Noto Sans TC", Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at top, #f9f4e8 0%, #e7d5c6 100%);
+            color: #3d322d;
+        }
+        .container {
             text-align: center;
-            background-color: #f5f5f5;
+            width: 100%;
+            max-width: 900px;
+            padding: 20px;
         }
         h1 {
-            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+            letter-spacing: 0.05em;
         }
-        #oracle-button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 20px 0;
-            cursor: pointer;
-            border: none;
-            border-radius: 4px;
+        .book-wrapper {
+            position: relative;
+            width: 720px;
+            height: 420px;
+            margin: 30px auto 10px;
+            perspective: 1500px;
         }
-        #oracle-button:hover {
-            background-color: #45a049;
+        .book {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+            transform-origin: left;
+            filter: drop-shadow(0 18px 30px rgba(0,0,0,0.18));
         }
-        #answer {
-            font-size: 24px;
-            margin-top: 20px;
-            min-height: 50px;
+        .book.open {
+            transform: rotateY(-145deg);
+        }
+        .input-row {
+            margin: 24px auto 0;
+            max-width: 650px;
+        }
+        .input-row input {
+            width: 100%;
+            border-radius: 999px;
+            border: 1px solid rgba(115, 82, 62, 0.3);
+            padding: 14px 18px;
+            font-size: 1rem;
+            outline: none;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .input-row input:focus {
+            border-color: #8b5e3c;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .book-shadow {
+            position: absolute;
+            inset: auto 20px 20px 20px;
+            height: 80%;
+            width: 60%;
+            background: radial-gradient(circle at center, rgba(0,0,0,0.08), transparent 55%);
+            filter: blur(12px);
+            z-index: -1;
+        }
+        .page {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            top: 0;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.08);
+        }
+        .page.left {
+            left: 0;
+            background: linear-gradient(120deg, #fef9f3 0%, #f2e5d4 100%);
+            border-right: 1px solid rgba(61,50,45,0.15);
+        }
+        .page.right {
+            right: 0;
+            transform-origin: left;
+            transform: rotateY(0deg);
+            background: linear-gradient(120deg, #fffdf8 0%, #f7eee1 100%);
+            border-left: 1px solid rgba(61,50,45,0.15);
+            transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .page::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255,255,255,0.45), transparent 65%);
+            pointer-events: none;
+        }
+        .page-content {
+            position: absolute;
+            inset: 30px;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
         }
-        .hidden {
-            display: none;
+        .page-content h2 {
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            letter-spacing: 0.08em;
+        }
+        .page-content p {
+            font-size: 1.5rem;
+            line-height: 1.8;
+            color: #5a4b42;
+            max-width: 320px;
+        }
+        .answer {
+            margin-top: 20px;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #6d4f37;
+            min-height: 3rem;
+        }
+        .button-row {
+            margin-top: 20px;
+        }
+        button {
+            border: none;
+            border-radius: 999px;
+            padding: 14px 30px;
+            font-size: 1rem;
+            background-color: #8b5e3c;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        button:hover {
+            transform: translateY(-2px);
+            background-color: #a16f45;
+        }
+        .note {
+            margin-top: 18px;
+            color: #5f5249;
+            font-size: 0.95rem;
+        }
+        @media (max-width: 780px) {
+            .book-wrapper {
+                width: 100%;
+                height: 320px;
+            }
+            .page-content p {
+                max-width: 260px;
+                font-size: 1.2rem;
+            }
+        }
+        @media (max-width: 520px) {
+            .book-wrapper {
+                height: 260px;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            button {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>隨機占卜工具</h1>
-    <p>請在心裡默念一個問題（可以用「是／否」或方向來回答的問題），然後點擊「翻開書」按鈕來獲取答案。</p>
-    <button id="oracle-button">翻開書</button>
-    <div id="answer" class="hidden"></div>
-    <p style="font-size: 14px; color: #666; margin-top: 30px;">記住，這只是個有趣的工具，用來引導你的思考和直覺。</p>
+    <div class="container">
+        <h1>翻開書的占卜</h1>
+        <p>在心裡默念你的問題，然後按下「翻開書」按鈕。答案會出現在書頁裡。</p>
+
+        <div class="input-row">
+            <input id="question-input" type="text" placeholder="在此輸入你的問題，或在心裡默念它" />
+        </div>
+
+        <div class="book-wrapper">
+            <div class="book" id="book">
+                <div class="page left">
+                    <div class="page-content">
+                        <h2>書中的左頁</h2>
+                        <p>請在上方輸入你的問題，然後按下「翻開書」。答案會出現在右頁中。</p>
+                    </div>
+                </div>
+                <div class="page right">
+                    <div class="page-content">
+                        <h2>答案</h2>
+                        <div class="answer" id="answer">請按下「翻開書」</div>
+                    </div>
+                </div>
+            </div>
+            <div class="book-shadow"></div>
+        </div>
+
+        <div class="button-row">
+            <button id="oracle-button">翻開書</button>
+        </div>
+        <p class="note">這只是用作思考引導的趣味工具，非真正預言。</p>
+    </div>
 
     <script>
         const sentences = [
@@ -66,15 +223,34 @@
             "改變即將到來"
         ];
 
+        const questionInput = document.getElementById('question-input');
         const button = document.getElementById('oracle-button');
         const answerDiv = document.getElementById('answer');
+        const book = document.getElementById('book');
 
-        button.addEventListener('click', function() {
-            const randomIndex = Math.floor(Math.random() * sentences.length);
-            const answer = sentences[randomIndex];
-            answerDiv.textContent = answer;
-            answerDiv.classList.remove('hidden');
-        });
+        function revealAnswer() {
+            const question = questionInput.value.trim();
+            if (!question) {
+                answerDiv.textContent = '先輸入你的問題，或在心裡默念它。';
+                book.classList.remove('open');
+                return;
+            }
+
+            book.classList.remove('open');
+            button.disabled = true;
+            button.textContent = '翻頁中...';
+            answerDiv.textContent = '正在讀取書頁...';
+
+            setTimeout(() => {
+                const index = Math.floor(Math.random() * sentences.length);
+                answerDiv.textContent = sentences[index];
+                book.classList.add('open');
+                button.disabled = false;
+                button.textContent = '再翻一次';
+            }, 700);
+        }
+
+        button.addEventListener('click', revealAnswer);
     </script>
 </body>
 </html></content>
