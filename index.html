@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>隨機占卜工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        #oracle-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 20px 0;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+        #oracle-button:hover {
+            background-color: #45a049;
+        }
+        #answer {
+            font-size: 24px;
+            margin-top: 20px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>隨機占卜工具</h1>
+    <p>請在心裡默念一個問題（可以用「是／否」或方向來回答的問題），然後點擊「翻開書」按鈕來獲取答案。</p>
+    <button id="oracle-button">翻開書</button>
+    <div id="answer" class="hidden"></div>
+    <p style="font-size: 14px; color: #666; margin-top: 30px;">記住，這只是個有趣的工具，用來引導你的思考和直覺。</p>
+
+    <script>
+        const sentences = [
+            "是的",
+            "現在還不是時候",
+            "你需要更多資訊",
+            "相信直覺",
+            "結果會出乎意料",
+            "保持耐心",
+            "這是個好機會",
+            "重新評估你的選擇",
+            "跟隨你的心",
+            "改變即將到來"
+        ];
+
+        const button = document.getElementById('oracle-button');
+        const answerDiv = document.getElementById('answer');
+
+        button.addEventListener('click', function() {
+            const randomIndex = Math.floor(Math.random() * sentences.length);
+            const answer = sentences[randomIndex];
+            answerDiv.textContent = answer;
+            answerDiv.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html></content>
+<parameter name="filePath">/workspaces/042703/index.html
