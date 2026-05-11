@@ -214,7 +214,7 @@
                 <div class="page inner">
                     <div class="page-content">
                         <h2>神秘占卜書</h2>
-                        <p>這本書包含了10個可能的答案。輸入你的問題，然後開始翻頁尋找指引。</p>
+                        <p>這本書包含了30個可能的答案。輸入你的問題，然後開始翻頁尋找指引。</p>
                         <div class="page-number">封面</div>
                     </div>
                 </div>
@@ -222,7 +222,7 @@
                     <div class="page-content">
                         <h2>答案</h2>
                         <div class="answer" id="answer">請輸入問題並開始翻頁</div>
-                        <div class="page-number" id="page-number">第 0 頁 / 10 頁</div>
+                        <div class="page-number" id="page-number">第 0 頁 / 30 頁</div>
                     </div>
                 </div>
                 <div class="page cover">
@@ -254,7 +254,27 @@
             "這是個好機會",
             "重新評估你的選擇",
             "跟隨你的心",
-            "改變即將到來"
+            "改變即將到來",
+            "集中你的精力",
+            "不要放棄希望",
+            "聆聽他人的建議",
+            "面對你的恐懼",
+            "一切都會好轉",
+            "現在就是行動的時候",
+            "深呼吸，放鬆",
+            "相信宇宙的安排",
+            "你比想像中更強大",
+            "靜觀其變",
+            "勇氣會帶來成功",
+            "寬恕會帶來自由",
+            "美好的事物即將到來",
+            "專注於當下",
+            "你已經知道答案了",
+            "相信你的第一直覺",
+            "時間會治癒一切",
+            "承諾你自己",
+            "無限的可能性在等待",
+            "你值得擁有最好的"
         ];
 
         const questionInput = document.getElementById('question-input');
@@ -291,7 +311,7 @@
 
             currentPage = 1;
             answerDiv.textContent = sentences[0];
-            pageNumberDiv.textContent = `第 ${currentPage} 頁 / ${sentences.length} 頁`;
+            pageNumberDiv.textContent = `第 ${currentPage} / 30 頁`;
             book.classList.add('open');
             isBookOpen = true;
             oracleButton.disabled = true;
